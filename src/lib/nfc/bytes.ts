@@ -58,7 +58,7 @@ export function concatBytes(chunks: Uint8Array[]): Uint8Array {
 export function shannonEntropy(bytes: Uint8Array): number {
   if (bytes.length === 0) return 0;
   const counts = new Uint32Array(256);
-  for (let i = 0; i < bytes.length; i++) counts[bytes[i]!]! + 0, counts[bytes[i]!]++;
+  for (let i = 0; i < bytes.length; i++) counts[bytes[i]!]++;
   let entropy = 0;
   for (let i = 0; i < 256; i++) {
     const c = counts[i]!;
