@@ -10,8 +10,8 @@ import { bytesToHex, toUint8 } from "@/lib/nfc/bytes";
 import { EMV_AIDS, manufacturerFromUid, schemeForAid } from "@/lib/nfc/chip";
 
 interface Search {
-  relay?: string;
-  token?: string;
+  relay: string;
+  token: string;
 }
 
 export const Route = createFileRoute("/mobile")({
@@ -31,8 +31,8 @@ export const Route = createFileRoute("/mobile")({
     ],
   }),
   validateSearch: (search: Record<string, unknown>): Search => ({
-    relay: typeof search["relay"] === "string" ? (search["relay"] as string) : undefined,
-    token: typeof search["token"] === "string" ? (search["token"] as string) : undefined,
+    relay: typeof search["relay"] === "string" ? (search["relay"] as string) : "",
+    token: typeof search["token"] === "string" ? (search["token"] as string) : "",
   }),
   component: MobileEngine,
 });
@@ -46,8 +46,8 @@ interface LogLine {
 
 function MobileEngine() {
   const search = Route.useSearch();
-  const [relay, setRelay] = useState(search.relay ?? "");
-  const [token, setToken] = useState(search.token ?? "");
+  const [relay, setRelay] = useState(search.relay);
+  const [token, setToken] = useState(search.token);
   const [status, setStatus] = useState<"idle" | "connecting" | "connected" | "error">("idle");
   const [scanning, setScanning] = useState(false);
   const [log, setLog] = useState<LogLine[]>([]);
