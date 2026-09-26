@@ -1,24 +1,55 @@
+import { useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { PairingHeader } from "@/components/nfc/pairing-header";
+import { DiagnosticPanel } from "@/components/nfc/diagnostic-panel";
+import { WriteBuilder } from "@/components/nfc/write-builder";
+import { CryptoWorkbench } from "@/components/nfc/crypto-workbench";
+import { SecurityLog } from "@/components/nfc/security-log";
+import { AutomationGrid } from "@/components/nfc/automation-grid";
+import { SocketLog } from "@/components/nfc/socket-log";
+import { Toaster } from "@/components/ui/sonner";
+import { ensureSession } from "@/lib/nfc/station-store";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "NFC-DDS · Command Deck" },
+      {
+        name: "description",
+        content:
+          "Command deck for the NFC Dual-Device Station: hex viewer, memory map, NDEF parser, crypto workbench, and EMV intercept log.",
+      },
+      { property: "og:title", content: "NFC-DDS · Command Deck" },
+      {
+        property: "og:description",
+        content:
+          "Pair a mobile NFC engine and inspect, build, write, and decrypt tags from a desktop command deck.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  useEffect(() => {
+    ensureSession();
+  }, []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-[1440px] space-y-4 p-4">
+        <PairingHeader />
+        <DiagnosticPanel />
+        <div className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
+          <WriteBuilder />
+          <SecurityLog />
+        </div>
+        <CryptoWorkbench />
+        <AutomationGrid />
+        <SocketLog />
+      </div>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

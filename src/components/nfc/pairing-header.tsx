@@ -89,7 +89,7 @@ export function PairingHeader() {
     };
   }, [open, mobileUrl]);
 
-  const meta = statusLabel[status] ?? statusLabel.disconnected!;
+  const meta = statusLabel[status] ?? statusLabel["disconnected"]!;
 
   return (
     <header className="panel bg-[var(--color-midnight)]/80 backdrop-blur">
