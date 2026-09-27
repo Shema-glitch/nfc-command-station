@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import QRCode from "qrcode";
+import { QRCodeSVG } from "qrcode.react";
 import { Radio, RefreshCw, ShieldCheck, Smartphone, Wifi, WifiOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,6 @@ export function PairingHeader() {
   const socketId = useStation((s) => s.socketId);
   const lastError = useStation((s) => s.lastError);
   const [open, setOpen] = useState(false);
-  const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
   useEffect(() => {
     ensureSession();
@@ -68,26 +67,6 @@ export function PairingHeader() {
     const origin = window.location.origin;
     return `${origin}/mobile?relay=${encodeURIComponent(relayUrl)}&token=${token}`;
   }, [relayUrl, token]);
-
-  useEffect(() => {
-    if (!open || !mobileUrl) return;
-    let cancelled = false;
-    QRCode.toDataURL(mobileUrl, {
-      margin: 1,
-      width: 288,
-      color: { dark: "#e2e8f0", light: "#0f172a" },
-      errorCorrectionLevel: "M",
-    })
-      .then((dataUrl) => {
-        if (!cancelled) setQrDataUrl(dataUrl);
-      })
-      .catch(() => {
-        if (!cancelled) setQrDataUrl("");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [open, mobileUrl]);
 
   const meta = statusLabel[status] ?? statusLabel["disconnected"]!;
 
@@ -149,7 +128,7 @@ export function PairingHeader() {
                 Pair Mobile Engine
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Pair Mobile Engine</DialogTitle>
                 <DialogDescription>
@@ -158,17 +137,18 @@ export function PairingHeader() {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 md:grid-cols-[auto_1fr] md:items-center">
-                <div className="mx-auto rounded-md border border-panel-border bg-[var(--color-surface)] p-3">
-                  {qrDataUrl ? (
-                    <img
-                      src={qrDataUrl}
-                      alt="Pairing QR"
-                      width={228}
-                      height={228}
-                      className="h-[228px] w-[228px]"
+                <div className="mx-auto shrink-0 rounded-md bg-white p-3">
+                  {mobileUrl ? (
+                    <QRCodeSVG
+                      value={mobileUrl}
+                      size={220}
+                      level="M"
+                      bgColor="#ffffff"
+                      fgColor="#000000"
+                      aria-label="Pairing QR"
                     />
                   ) : (
-                    <div className="flex h-[228px] w-[228px] items-center justify-center text-xs text-muted-foreground">
+                    <div className="flex h-[220px] w-[220px] items-center justify-center text-xs text-muted-foreground">
                       Preparing QR…
                     </div>
                   )}
