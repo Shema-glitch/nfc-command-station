@@ -158,17 +158,18 @@ export function PairingHeader() {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 md:grid-cols-[auto_1fr] md:items-center">
-                <div className="mx-auto rounded-md border border-panel-border bg-[var(--color-surface)] p-3">
-                  {qrDataUrl ? (
-                    <img
-                      src={qrDataUrl}
-                      alt="Pairing QR"
-                      width={228}
-                      height={228}
-                      className="h-[228px] w-[228px]"
+                <div className="mx-auto shrink-0 rounded-md bg-white p-3">
+                  {mobileUrl ? (
+                    <QRCodeSVG
+                      value={mobileUrl}
+                      size={220}
+                      level="M"
+                      bgColor="#ffffff"
+                      fgColor="#000000"
+                      aria-label="Pairing QR"
                     />
                   ) : (
-                    <div className="flex h-[228px] w-[228px] items-center justify-center text-xs text-muted-foreground">
+                    <div className="flex h-[220px] w-[220px] items-center justify-center text-xs text-muted-foreground">
                       Preparing QR…
                     </div>
                   )}
