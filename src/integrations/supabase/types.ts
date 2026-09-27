@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pairing_sessions: {
+        Row: {
+          channel: string
+          created_at: string
+          desktop_seen_at: string | null
+          expires_at: string
+          id: string
+          mobile_agent: string | null
+          mobile_connected_at: string | null
+          revoked: boolean
+          token_hash: string
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          desktop_seen_at?: string | null
+          expires_at?: string
+          id?: string
+          mobile_agent?: string | null
+          mobile_connected_at?: string | null
+          revoked?: boolean
+          token_hash: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          desktop_seen_at?: string | null
+          expires_at?: string
+          id?: string
+          mobile_agent?: string | null
+          mobile_connected_at?: string | null
+          revoked?: boolean
+          token_hash?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
