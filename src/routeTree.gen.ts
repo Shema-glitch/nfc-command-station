@@ -9,12 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as MobileRouteImport } from './routes/mobile'
+import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppAutomationRouteImport } from './routes/_app.automation'
+import { Route as AppCryptoRouteImport } from './routes/_app.crypto'
+import { Route as AppLogsRouteImport } from './routes/_app.logs'
+import { Route as AppSecurityRouteImport } from './routes/_app.security'
+import { Route as AppWriteRouteImport } from './routes/_app.write'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MobileRoute = MobileRouteImport.update({
@@ -22,40 +27,109 @@ const MobileRoute = MobileRouteImport.update({
   path: '/mobile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAutomationRoute = AppAutomationRouteImport.update({
+  id: '/automation',
+  path: '/automation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCryptoRoute = AppCryptoRouteImport.update({
+  id: '/crypto',
+  path: '/crypto',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLogsRoute = AppLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecurityRoute = AppSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWriteRoute = AppWriteRouteImport.update({
+  id: '/write',
+  path: '/write',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
   '/mobile': typeof MobileRoute
+  '/automation': typeof AppAutomationRoute
+  '/crypto': typeof AppCryptoRoute
+  '/logs': typeof AppLogsRoute
+  '/security': typeof AppSecurityRoute
+  '/write': typeof AppWriteRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/mobile': typeof MobileRoute
+  '/automation': typeof AppAutomationRoute
+  '/crypto': typeof AppCryptoRoute
+  '/logs': typeof AppLogsRoute
+  '/security': typeof AppSecurityRoute
+  '/write': typeof AppWriteRoute
+  '/': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
   '/mobile': typeof MobileRoute
+  '/_app/automation': typeof AppAutomationRoute
+  '/_app/crypto': typeof AppCryptoRoute
+  '/_app/logs': typeof AppLogsRoute
+  '/_app/security': typeof AppSecurityRoute
+  '/_app/write': typeof AppWriteRoute
+  '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/mobile'
+  fullPaths:
+    | '/'
+    | '/mobile'
+    | '/automation'
+    | '/crypto'
+    | '/logs'
+    | '/security'
+    | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/mobile'
-  id: '__root__' | '/' | '/mobile'
+  to:
+    | '/mobile'
+    | '/automation'
+    | '/crypto'
+    | '/logs'
+    | '/security'
+    | '/write'
+    | '/'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/mobile'
+    | '/_app/automation'
+    | '/_app/crypto'
+    | '/_app/logs'
+    | '/_app/security'
+    | '/_app/write'
+    | '/_app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
   MobileRoute: typeof MobileRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_app': {
+      id: '/_app'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mobile': {
@@ -65,11 +139,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MobileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/': {
+      id: '/_app/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/automation': {
+      id: '/_app/automation'
+      path: '/automation'
+      fullPath: '/automation'
+      preLoaderRoute: typeof AppAutomationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/crypto': {
+      id: '/_app/crypto'
+      path: '/crypto'
+      fullPath: '/crypto'
+      preLoaderRoute: typeof AppCryptoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/logs': {
+      id: '/_app/logs'
+      path: '/logs'
+      fullPath: '/logs'
+      preLoaderRoute: typeof AppLogsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/security': {
+      id: '/_app/security'
+      path: '/security'
+      fullPath: '/security'
+      preLoaderRoute: typeof AppSecurityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/write': {
+      id: '/_app/write'
+      path: '/write'
+      fullPath: '/write'
+      preLoaderRoute: typeof AppWriteRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAutomationRoute: typeof AppAutomationRoute
+  AppCryptoRoute: typeof AppCryptoRoute
+  AppLogsRoute: typeof AppLogsRoute
+  AppSecurityRoute: typeof AppSecurityRoute
+  AppWriteRoute: typeof AppWriteRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAutomationRoute: AppAutomationRoute,
+  AppCryptoRoute: AppCryptoRoute,
+  AppLogsRoute: AppLogsRoute,
+  AppSecurityRoute: AppSecurityRoute,
+  AppWriteRoute: AppWriteRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
   MobileRoute: MobileRoute,
 }
 export const routeTree = rootRouteImport
