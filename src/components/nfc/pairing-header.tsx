@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import QRCode from "qrcode";
+import { QRCodeSVG } from "qrcode.react";
 import { Radio, RefreshCw, ShieldCheck, Smartphone, Wifi, WifiOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,6 @@ export function PairingHeader() {
   const socketId = useStation((s) => s.socketId);
   const lastError = useStation((s) => s.lastError);
   const [open, setOpen] = useState(false);
-  const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
   useEffect(() => {
     ensureSession();
@@ -68,26 +67,6 @@ export function PairingHeader() {
     const origin = window.location.origin;
     return `${origin}/mobile?relay=${encodeURIComponent(relayUrl)}&token=${token}`;
   }, [relayUrl, token]);
-
-  useEffect(() => {
-    if (!open || !mobileUrl) return;
-    let cancelled = false;
-    QRCode.toDataURL(mobileUrl, {
-      margin: 1,
-      width: 288,
-      color: { dark: "#e2e8f0", light: "#0f172a" },
-      errorCorrectionLevel: "M",
-    })
-      .then((dataUrl) => {
-        if (!cancelled) setQrDataUrl(dataUrl);
-      })
-      .catch(() => {
-        if (!cancelled) setQrDataUrl("");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [open, mobileUrl]);
 
   const meta = statusLabel[status] ?? statusLabel["disconnected"]!;
 
