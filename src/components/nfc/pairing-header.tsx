@@ -149,7 +149,7 @@ export function PairingHeader() {
                 Pair Mobile Engine
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Pair Mobile Engine</DialogTitle>
                 <DialogDescription>
